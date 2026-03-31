@@ -2,6 +2,39 @@
 
 A terminal-based research paper tool for [arXiv.org](https://arxiv.org) with Rich UI, built to overcome the limitations of the standard arXiv web interface.
 
+```
+                          __  __     _                                      __ _
+    o O O  __ _      _ _  \ \/ /    (_)    __ __            ___      _ _   / _` |
+   o      / _` |    | '_|  >  <     | |    \ V /     _     / _ \    | '_|  \__, |
+  TS__[O] \__,_|   _|_|_  /_/\_\   _|_|_   _\_/_   _(_)_   \___/   _|_|_   |___/
+ {======|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|
+./o--000'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
+```
+
+---
+
+## Table of Contents
+
+- [Built with](#built-with)
+- [Why use this instead of arxiv.org?](#why-use-this-instead-of-arxivorg)
+- [Requirements](#requirements)
+- [Quick start](#quick-start)
+- [Commands](#commands)
+  - [Search](#search)
+  - [Prefix search](#prefix-search)
+  - [Today's papers](#todays-papers)
+  - [Other commands](#other-commands)
+- [Search options](#search-options)
+- [Results table](#results-table)
+- [Paper details](#paper-details)
+- [Download](#download)
+- [Full-text search](#full-text-search)
+- [Architecture](#architecture)
+- [Configuration](#configuration)
+- [Rate limiting](#rate-limiting)
+- [Graceful shutdown](#graceful-shutdown)
+- [Cross-platform support](#cross-platform-support)
+
 ---
 
 ## Built with
