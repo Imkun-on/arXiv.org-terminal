@@ -1,12 +1,27 @@
-# Scraper_Arxiv.py
+# Arxiv_Scraper.py
 
 A terminal-based research paper tool for [arXiv.org](https://arxiv.org) with Rich UI, built to overcome the limitations of the standard arXiv web interface.
 
 ---
 
+## Built with
+
+<p>
+  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/arXiv_API-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white" alt="arXiv"/>
+  <img src="https://img.shields.io/badge/Rich-Terminal_UI-4EC820?style=for-the-badge" alt="Rich"/>
+  <img src="https://img.shields.io/badge/Semantic_Scholar-1857B6?style=for-the-badge&logo=semanticscholar&logoColor=white" alt="Semantic Scholar"/>
+  <img src="https://img.shields.io/badge/Requests-HTTP-FF6600?style=for-the-badge" alt="Requests"/>
+  <img src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"/>
+  <img src="https://img.shields.io/badge/PyMuPDF-PDF_Search-CC0000?style=for-the-badge" alt="PyMuPDF"/>
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License"/>
+</p>
+
+---
+
 ## Why use this instead of arxiv.org?
 
-| Feature | arxiv.org (website) | Scraper_Arxiv |
+| Feature | arxiv.org (website) | Arxiv_Scraper |
 |---|---|---|
 | **Search** | Basic keyword search, one field at a time | Smart multi-keyword search with AND logic, auto title/global fallback |
 | **Today's papers** | Browse by category, no filtering | `today` command with interactive filters (keyword, author, subcategory) |
@@ -39,7 +54,7 @@ If `PyMuPDF` is not installed, the `search:` command will show a helpful install
 ## Quick start
 
 ```bash
-python Scraper_Arxiv.py
+python Arxiv_Scraper.py
 ```
 
 The interactive prompt appears:
@@ -187,7 +202,7 @@ Requires `PyMuPDF` (`pip install PyMuPDF`).
 ## Architecture
 
 ```
-Scraper_Arxiv.py
+Arxiv_Scraper.py
     |
     |-- arXiv API (arxiv python package)
     |       Search, paper metadata, PDF download
