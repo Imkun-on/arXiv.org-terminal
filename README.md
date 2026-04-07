@@ -27,7 +27,7 @@
 
 ```bash
 git clone https://github.com/Imkun-on/arXiv.org-terminal.git
-cd arxiv-paper-scraper
+cd arXiv.org-terminal
 pip install -r requirements.txt
 python Scraper_Arxiv.py
 ```
