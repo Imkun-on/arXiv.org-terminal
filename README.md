@@ -1,7 +1,3 @@
-# Arxiv_Scraper.py
-
-A terminal-based research paper tool for [arXiv.org](https://arxiv.org) with Rich UI, built to overcome the limitations of the standard arXiv web interface.
-
 ```
                           __  __     _                                      __ _
     o O O  __ _      _ _  \ \/ /    (_)    __ __            ___      _ _   / _` |
@@ -11,11 +7,28 @@ A terminal-based research paper tool for [arXiv.org](https://arxiv.org) with Ric
 ./o--000'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
 ```
 
+<h1 align="center">Arxiv_Scraper.py</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/arXiv-API-B31B1B?logo=arxiv&logoColor=white" alt="arXiv">
+  <img src="https://img.shields.io/badge/Rich-13.0+-4EC820?logo=terminal&logoColor=white" alt="Rich">
+  <img src="https://img.shields.io/badge/Semantic%20Scholar-API-1857B6?logo=semanticscholar&logoColor=white" alt="Semantic Scholar">
+  <img src="https://img.shields.io/badge/Requests-2.31+-FF6600?logo=python&logoColor=white" alt="Requests">
+  <img src="https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite&logoColor=white" alt="SQLite">
+  <img src="https://img.shields.io/badge/PyMuPDF-PDF%20Search-CC0000?logo=adobeacrobatreader&logoColor=white" alt="PyMuPDF">
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License">
+</p>
+
+<p align="center">
+  A terminal-based research paper tool for <a href="https://arxiv.org">arXiv.org</a> with Rich UI,<br>
+  built to overcome the limitations of the standard arXiv web interface.
+</p>
+
 ---
 
 ## Table of Contents
 
-- [Built with](#built-with)
 - [Why use this instead of arxiv.org?](#why-use-this-instead-of-arxivorg)
 - [Requirements](#requirements)
 - [Quick start](#quick-start)
@@ -34,21 +47,6 @@ A terminal-based research paper tool for [arXiv.org](https://arxiv.org) with Ric
 - [Rate limiting](#rate-limiting)
 - [Graceful shutdown](#graceful-shutdown)
 - [Cross-platform support](#cross-platform-support)
-
----
-
-## Built with
-
-<p>
-  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
-  <img src="https://img.shields.io/badge/arXiv_API-B31B1B?style=for-the-badge&logo=arxiv&logoColor=white" alt="arXiv"/>
-  <img src="https://img.shields.io/badge/Rich-Terminal_UI-4EC820?style=for-the-badge" alt="Rich"/>
-  <img src="https://img.shields.io/badge/Semantic_Scholar-1857B6?style=for-the-badge&logo=semanticscholar&logoColor=white" alt="Semantic Scholar"/>
-  <img src="https://img.shields.io/badge/Requests-HTTP-FF6600?style=for-the-badge" alt="Requests"/>
-  <img src="https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite"/>
-  <img src="https://img.shields.io/badge/PyMuPDF-PDF_Search-CC0000?style=for-the-badge" alt="PyMuPDF"/>
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License"/>
-</p>
 
 ---
 
@@ -93,7 +91,7 @@ python Arxiv_Scraper.py
 The interactive prompt appears:
 
 ```
-📄 Search papers >
+Search papers >
 ```
 
 ---
@@ -294,3 +292,9 @@ Press `Ctrl+C` once to finish current downloads and exit cleanly. Press twice to
 ## Cross-platform support
 
 Works on **Windows**, **macOS**, and **Linux**. No hardcoded paths -- all directories are relative to the script location. UTF-8 output is automatically configured on Windows terminals.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
