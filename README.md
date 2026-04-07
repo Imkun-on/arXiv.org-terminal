@@ -29,7 +29,7 @@
 git clone https://github.com/Imkun-on/arXiv.org-terminal.git
 cd arXiv.org-terminal
 pip install -r requirements.txt
-python Scraper_Arxiv.py
+python arXiv.org_Scraper.py
 ```
 
 ---
