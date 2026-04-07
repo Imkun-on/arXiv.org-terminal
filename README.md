@@ -7,7 +7,7 @@
 ./o--000'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
 ```
 
-<h1 align="center">Arxiv_Scraper.py</h1>
+<h1 align="center">arXiv Paper Scraper & Research Tool</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white" alt="Python">
@@ -25,13 +25,24 @@
   built to overcome the limitations of the standard arXiv web interface.
 </p>
 
+```bash
+git clone https://github.com/Imkun-on/arxiv-paper-scraper.git
+cd arxiv-paper-scraper
+pip install -r requirements.txt
+python Scraper_Arxiv.py
+```
+
 ---
 
 ## Table of Contents
 
 - [Why use this instead of arxiv.org?](#why-use-this-instead-of-arxivorg)
-- [Requirements](#requirements)
-- [Quick start](#quick-start)
+- [Libraries Used & Why](#libraries-used--why)
+- [Requirements & Installation](#requirements--installation)
+- [Usage & Examples](#usage--examples)
+  - [Example 1: Search by Keyword](#example-1-search-by-keyword)
+  - [Example 2: Search by arXiv ID](#example-2-search-by-arxiv-id)
+  - [Example 3: Today's Papers](#example-3-todays-papers)
 - [Commands](#commands)
   - [Search](#search)
   - [Prefix search](#prefix-search)
@@ -47,6 +58,7 @@
 - [Rate limiting](#rate-limiting)
 - [Graceful shutdown](#graceful-shutdown)
 - [Cross-platform support](#cross-platform-support)
+- [License](#license)
 
 ---
 
@@ -67,14 +79,50 @@
 
 ---
 
-## Requirements
+## Libraries Used & Why
 
+| Library | Version | Purpose | Why this library? |
+|---------|---------|---------|-------------------|
+| `arxiv` | >= 2.4 | Python client for the arXiv API — handles search, metadata retrieval, and PDF download | The official Python wrapper for arXiv's API. Manages query construction, pagination, rate limiting (built-in `delay_seconds`), and automatic retries on HTTP 429. Without it, you'd need to manually build Atom/XML queries and parse RSS responses — this abstracts all of that into clean Python objects (`arxiv.Result`) |
+| `requests` | >= 2.31 | HTTP client for Semantic Scholar API and direct file downloads (LaTeX source, RSS feeds) | The de facto Python HTTP library. Used here for everything *outside* the arXiv API: citation counts from Semantic Scholar, related paper recommendations, RSS feed fetching for today's stats, and LaTeX source `.tar.gz` downloads. Lightweight, synchronous, and reliable |
+| `rich` | >= 13.0 | Terminal UI — tables, panels, progress bars, spinners, colored text, live rendering | Transforms the CLI from plain text into a polished interface. Provides `Table` for search results, `Panel` for paper details, `Progress` with spinners for downloads, and `Live` for real-time multi-progress rendering. All without external dependencies beyond Python |
+| `SQLite` | built-in | Persistent storage for download history and paper metadata | Part of Python's standard library (`sqlite3`), so zero extra dependencies. Tracks every downloaded paper with metadata (arXiv ID, title, authors, categories, DOI, file path, size). Enables skip-if-already-downloaded logic and could support future features like local search by metadata |
+| `PyMuPDF` | optional | Full-text PDF search across all downloaded papers | The only library needed for the `search:` command. Extracts text from PDF pages and allows keyword searching with page numbers and context snippets. Marked as optional — if not installed, the tool simply shows an install message instead of crashing. Chosen over `pdfminer` for its speed and lower memory footprint |
+
+### Standard Library Modules (no install needed)
+
+| Module | Purpose |
+|--------|---------|
+| `threading` + `concurrent.futures` | Parallel downloads (3 threads by default via `ThreadPoolExecutor`) and concurrent citation fetching |
+| `signal` | Graceful shutdown — first `Ctrl+C` finishes current work, second forces exit |
+| `re` | Regex for arXiv ID extraction, filename sanitization, page count parsing |
+| `xml.etree.ElementTree` | RSS feed parsing for today's paper statistics (Atom format) |
+| `argparse` | Command-line argument parsing |
+| `logging` | Rotating file logs for debugging (`logs/scraper_arxiv.log`) |
+
+---
+
+## Requirements & Installation
+
+### Python
+
+Requires **Python 3.10+**.
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
 ```
+
+Or manually (only what's needed for this scraper):
+
+```bash
 pip install arxiv requests rich
 ```
 
 Optional (for full-text PDF search):
-```
+
+```bash
 pip install PyMuPDF
 ```
 
@@ -82,16 +130,152 @@ If `PyMuPDF` is not installed, the `search:` command will show a helpful install
 
 ---
 
-## Quick start
+## Usage & Examples
 
 ```bash
-python Arxiv_Scraper.py
+python Scraper_Arxiv.py
 ```
 
 The interactive prompt appears:
 
 ```
-Search papers >
+📄 Search papers >
+```
+
+### Example 1: Search by Keyword
+
+```
+📄 Search papers > transformer
+
+  Sort:    1 Relevance  2 Date  3 Last updated
+  Max:     20 (default)
+  Period:  1 All  2 Today only  3 Last week
+  Sort, Max, Period (default 1,20,1): 1,10
+
+  ⠋ Searching arXiv...  ████████████████  1/1  0:00:05
+
+  ⠋ Loading citations...  ██████████████  10/10  0:00:12
+
+                      Results (10)
+  ┌────┬──────────────────────────────────┬────────────────┬────────┬────────────┬──────┬───────┐
+  │  # │ Title                            │ Authors        │ Cat.   │ Date       │ Cit. │ Pages │
+  ├────┼──────────────────────────────────┼────────────────┼────────┼────────────┼──────┼───────┤
+  │  1 │ Attention Is All You Need        │ Vaswani +7     │ cs.CL  │ 2017-06-12 │ 130k │ 15    │
+  │  2 │ BERT: Pre-training of Deep Bi... │ Devlin +3      │ cs.CL  │ 2018-10-11 │ 95k  │ 14    │
+  │  3 │ An Image is Worth 16x16 Words... │ Dosovitskiy +11│ cs.CV  │ 2020-10-22 │ 42k  │ 22    │
+  │  4 │ ...                              │ ...            │ ...    │ ...        │ ...  │ ...   │
+  └────┴──────────────────────────────────┴────────────────┴────────┴────────────┴──────┴───────┘
+
+  · d <num> for paper details
+
+  Choose > d 1
+
+  ╭──────────────────── Paper Details ────────────────────╮
+  │  Attention Is All You Need                            │
+  │                                                       │
+  │  Authors:    Ashish Vaswani, Noam Shazeer, ...        │
+  │  Categories: cs.CL, cs.LG                            │
+  │  Published:  2017-06-12  |  Updated: 2023-08-02      │
+  │  arXiv ID:   1706.03762                               │
+  │  Comments:   15 pages, NeurIPS 2017                   │
+  │  PDF:        https://arxiv.org/pdf/1706.03762         │
+  │  Citations:  130,234 (influential: 12,456)            │
+  │                                                       │
+  │  Abstract:                                            │
+  │  The dominant sequence transduction models are        │
+  │  based on complex recurrent or convolutional neural   │
+  │  networks...                                          │
+  ╰───────────────────────────────────────────────────────╯
+
+  Choose > 1
+
+  Format: 1 PDF only  2 PDF + LaTeX source (.tar.gz)
+  Choice (1/2, default 1): 2
+
+  ╭──────────── Download summary ────────────╮
+  │  Paper:   1                              │
+  │  Format:  PDF + LaTeX                    │
+  │  Folder:  Download_Globale/download_arxiv│
+  ╰──────────────────────────────────────────╯
+  Proceed? (y/n, default y): y
+
+  ──────────────── ⬇ Download PDF + LaTeX ────────────────
+    Thread: 3  Paper: 1
+
+    ⠋ Paper  ████████████████████████████  100%  1/1  │ 0:00:03 → 0:00:00
+
+  ╔══════════ ✅ Summary ══════════╗
+  ║  Total papers    1             ║
+  ║  ✔ Downloaded    1             ║
+  ║  Total size      1.2 MB        ║
+  ╚════════════════════════════════╝
+```
+
+---
+
+### Example 2: Search by arXiv ID
+
+```
+📄 Search papers > 1706.03762
+
+  Sort, Max, Period (default 1,20,1):
+
+  ⠋ Searching by arXiv ID...
+
+                      Results (1)
+  ┌────┬───────────────────────────┬────────────────┬────────┬────────────┬───────┬───────┐
+  │  # │ Title                     │ Authors        │ Cat.   │ Date       │ Cit.  │ Pages │
+  ├────┼───────────────────────────┼────────────────┼────────┼────────────┼───────┼───────┤
+  │  1 │ Attention Is All You Need │ Vaswani +7     │ cs.CL  │ 2017-06-12 │ 130k  │ 15    │
+  └────┴───────────────────────────┴────────────────┴────────┴────────────┴───────┴───────┘
+
+  Choose > 1
+  ...
+```
+
+> With a direct arXiv ID, the tool skips the search step and retrieves the paper directly.
+
+---
+
+### Example 3: Today's Papers
+
+```
+📄 Search papers > today:cs.AI
+
+  ⠋ Loading today's papers for cs.AI...
+
+  ╭───────────── 📄 Today's papers ─────────────╮
+  │  cs.AI  12 new  3 updated  15 total          │
+  │                                               │
+  │  cs.AI   15                                   │
+  │  cs.LG    8                                   │
+  │  cs.CL    4                                   │
+  ╰───────────────────────────────────────────────╯
+
+  ╭──────────── Filters ────────────╮
+  │  Filter          Description    │
+  │  all             Show all       │
+  │  new             New only       │
+  │  sub:cs.LG       By subcategory │
+  │  key:transformer  By keyword    │
+  │  au:Hinton        By author     │
+  │  top:20           First N       │
+  │  q                Back          │
+  ╰─────────────────────────────────╯
+
+  Filter > key:attention
+
+            Today's papers (3 total)
+  ┌────┬────────────────────────────┬──────────────┬────────┬────────────┬─────┐
+  │  # │ Title                      │ Authors      │ Cat.   │ Date       │ New │
+  ├────┼────────────────────────────┼──────────────┼────────┼────────────┼─────┤
+  │  1 │ Cross-Attention Fusion ... │ Smith +2     │ cs.AI  │ 2026-04-07 │ yes │
+  │  2 │ Efficient Self-Attentio... │ Lee, Kim     │ cs.AI  │ 2026-04-07 │ yes │
+  │  3 │ Attention-Based Graph N... │ Rossi +4     │ cs.AI  │ 2026-04-07 │ upd.│
+  └────┴────────────────────────────┴──────────────┴────────┴────────────┴─────┘
+
+  Choose > 1-3
+  ...
 ```
 
 ---
@@ -233,24 +417,24 @@ Requires `PyMuPDF` (`pip install PyMuPDF`).
 ## Architecture
 
 ```
-Arxiv_Scraper.py
-    |
-    |-- arXiv API (arxiv python package)
-    |       Search, paper metadata, PDF download
-    |
-    |-- arXiv RSS feed (rss.arxiv.org)
-    |       Today's announcement statistics (stats command)
-    |
-    |-- Semantic Scholar API
-    |       Citation counts, related papers
-    |
-    |-- Rich (terminal UI)
-    |       Tables, panels, progress bars, colors
-    |
-    |-- SQLite (via scraper_db)
-    |       Download history and metadata storage
-    |
-    |-- PyMuPDF (optional)
+Scraper_Arxiv.py
+    │
+    ├── arXiv API (arxiv python package)
+    │       Search, paper metadata, PDF download
+    │
+    ├── arXiv RSS feed (rss.arxiv.org)
+    │       Today's announcement statistics (stats command)
+    │
+    ├── Semantic Scholar API
+    │       Citation counts, related papers
+    │
+    ├── Rich (terminal UI)
+    │       Tables, panels, progress bars, colors
+    │
+    ├── SQLite (via scraper_db)
+    │       Download history and metadata storage
+    │
+    └── PyMuPDF (optional)
             Full-text PDF search
 ```
 
@@ -291,7 +475,7 @@ Press `Ctrl+C` once to finish current downloads and exit cleanly. Press twice to
 
 ## Cross-platform support
 
-Works on **Windows**, **macOS**, and **Linux**. No hardcoded paths -- all directories are relative to the script location. UTF-8 output is automatically configured on Windows terminals.
+Works on **Windows**, **macOS**, and **Linux**. No hardcoded paths — all directories are relative to the script location. UTF-8 output is automatically configured on Windows terminals.
 
 ---
 
