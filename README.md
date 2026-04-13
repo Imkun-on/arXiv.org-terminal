@@ -1,13 +1,6 @@
-```
-                          __  __     _                                      __ _
-    o O O  __ _      _ _  \ \/ /    (_)    __ __            ___      _ _   / _` |
-   o      / _` |    | '_|  >  <     | |    \ V /     _     / _ \    | '_|  \__, |
-  TS__[O] \__,_|   _|_|_  /_/\_\   _|_|_   _\_/_   _(_)_   \___/   _|_|_   |___/
- {======|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|
-./o--000'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'
-```
+<div align="center">
 
-<h1 align="center">arXiv Paper Scraper & Research Tool</h1>
+# arXiv Paper Scraper & Research Tool
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white" alt="Python">
