@@ -18,6 +18,8 @@
   built to overcome the limitations of the standard arXiv web interface.
 </p>
 
+</div>
+
 ```bash
 git clone https://github.com/Imkun-on/arXiv.org-terminal.git
 cd arXiv.org-terminal
